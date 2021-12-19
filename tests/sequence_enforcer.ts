@@ -12,7 +12,7 @@ describe('sequence_enforcer', () => {
 
 
   it('Initialize and reset, then increase', async () => {
-    const [address, bump] = await anchor.web3.PublicKey.findProgramAddress([Buffer.from("SOL-PERP")], program.programId)
+    const [address, bump] = await anchor.web3.PublicKey.findProgramAddress([Buffer.from("SOL-PERP"), program.provider.wallet.publicKey.toBuffer()], program.programId)
 
     const tx = await program.rpc.initialize(bump, "SOL-PERP", {
       accounts: {
@@ -43,7 +43,7 @@ describe('sequence_enforcer', () => {
   });
 
   it('Increase out of order', async () => {
-    const [address, bump] = await anchor.web3.PublicKey.findProgramAddress([Buffer.from("SOL-PERP")], program.programId)
+    const [address, bump] = await anchor.web3.PublicKey.findProgramAddress([Buffer.from("SOL-PERP"), program.provider.wallet.publicKey.toBuffer()], program.programId)
 
     await program.rpc.checkAndSetSequenceNumber(new anchor.BN(1237), {
       accounts: {

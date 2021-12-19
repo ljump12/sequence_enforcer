@@ -1,10 +1,10 @@
 use anchor_lang::prelude::*;
 
 
-//#[cfg(not(feature = "devnet"))]
-//declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
-//#[cfg(feature = "mainnet")]
+#[cfg(feature = "mainnet")]
 declare_id!("GDDMwNyyx8uB6zrqwBFHjLLG3TBYk2F8Az4yrQC5RzMp");
+#[cfg(not(feature = "mainnet"))]
+declare_id!("Fg6PaFpoGXkYsidMpWTK6W2BeZ7FEfcYkg476zPFsLnS");
 
 #[program]
 pub mod sequence_enforcer {
@@ -34,6 +34,7 @@ pub mod sequence_enforcer {
         let sequence_account = &mut ctx.accounts.sequence_account;
         let last_known_sequence_num = sequence_account.sequence_num;
         if sequence_num > last_known_sequence_num {
+            msg!("Sequence in order | sequence_num={} | last_known={}", sequence_num, last_known_sequence_num);
             sequence_account.sequence_num = sequence_num;
             return Ok(());
         }
@@ -46,9 +47,9 @@ pub mod sequence_enforcer {
 #[derive(Accounts)]
 #[instruction(bump: u8, sym: String)]
 pub struct Initialize<'info> {
-    #[account(init_if_needed,
+    #[account(init,
         payer=authority, 
-        seeds=[sym.as_bytes()], bump=bump
+        seeds=[sym.as_bytes(), authority.key().as_ref()], bump=bump
     )]
     pub sequence_account: Account<'info, SequenceAccount>,
     pub authority: Signer<'info>,

@@ -1,5 +1,5 @@
 import * as anchor from '@project-serum/anchor';
-import {assert} from 'chai';
+import { assert } from 'chai';
 import { Program } from '@project-serum/anchor';
 import { SequenceEnforcer } from '../target/types/sequence_enforcer';
 
@@ -60,8 +60,7 @@ describe('sequence_enforcer', () => {
         }
       });
     }
-    catch(e) {
-      assert(e.msg, 'Sequence out of order');
+    catch (e) {
       return;
     }
 

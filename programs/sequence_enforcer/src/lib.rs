@@ -47,7 +47,7 @@ pub mod sequence_enforcer {
 #[derive(Accounts)]
 #[instruction(bump: u8, sym: String)]
 pub struct Initialize<'info> {
-    #[account(init,
+    #[account(init_if_needed,
         payer=authority, 
         seeds=[sym.as_bytes(), authority.key().as_ref()], bump=bump
     )]
